@@ -1,0 +1,17 @@
+[project]
+name = "langgraph-rag"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "faiss-cpu>=1.13.2",
+    "langchain>=1.2.0",
+    "langchain-community>=0.4.1",
+    "langchain-core>=1.2.5",
+    "langchain-groq>=1.1.1",
+    "pypdf>=6.5.0",
+    "python-dotenv>=1.2.1",
+    "sentence-transformers>=5.2.0",
+    "streamlit>=1.52.2",
+]
