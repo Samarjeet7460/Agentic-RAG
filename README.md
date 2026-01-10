@@ -8,7 +8,7 @@ The backend is built using LangGraph to orchestrate agent workflows, LangChain f
 
 Document Ingestion
 
-PDF → Chunking → Embedding → FAISS Vector Store
+PDF → Chunking → Embedding → Pinecone
 
 Agentic Retrieval Loop
 
@@ -36,7 +36,7 @@ LangGraph
 
 Groq (LLaMA Models)
 
-FAISS
+Pinecone
 
 HuggingFace Sentence Transformers
 

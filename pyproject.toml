@@ -6,10 +6,12 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "faiss-cpu>=1.13.2",
+    "iprogress>=0.4",
     "langchain>=1.2.0",
     "langchain-community>=0.4.1",
     "langchain-core>=1.2.5",
     "langchain-groq>=1.1.1",
+    "langchain-huggingface>=1.2.0",
     "langgraph>=1.0.5",
     "pinecone>=8.0.0",
     "pinecone-text>=0.11.0",
