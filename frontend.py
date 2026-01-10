@@ -2,10 +2,17 @@ import streamlit as st
 from main import Agentic_RAG
 import os
 
+st.set_page_config(page_title="Document QNA Chatbot!", page_icon="🤖")
 st.title("Agentic RAG Chatbot")
 
 BASE_DOCS_DIR = "docs"
 os.makedirs(BASE_DOCS_DIR, exist_ok=True)
+
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+if "rag" not in st.session_state:
+    st.session_state.rag = None
 
 
 uploaded_file = st.file_uploader("Upload a PDF", type=["pdf"])
@@ -15,23 +22,37 @@ if uploaded_file:
 
     with open(save_path, "wb") as f:
         f.write(uploaded_file.getbuffer())
+    st.success(f"Document uploaded successfully!")
 
-    st.success(f"File saved at {save_path}")
+    if st.session_state.rag is None:
+        with st.spinner("Indexing document..."):
+            rag = Agentic_RAG(path=save_path)
+            rag.ingest_documents()
+            st.session_state.rag = rag
 
-    if "rag" not in st.session_state:
-        rag = Agentic_RAG(path=save_path)
-        rag.ingest_documents()
-        rag.load_vectorstore()
-        st.session_state.rag = rag
-        st.success("Vector store ready!")
 
-if "rag" in st.session_state:
-    chat_input = st.chat_input("Ask a question from the document...")
+for msg in st.session_state.messages:
+    with st.chat_message(msg["role"]):
+        st.write(msg["content"])
 
-    if chat_input:
+
+if st.session_state.rag:
+    user_input = st.chat_input("Ask a question from the document...")
+
+    if user_input:
+        st.session_state.messages.append(
+            {"role": "user", "content": user_input}
+        )
+
         with st.chat_message("user"):
-            st.write(chat_input)
+            st.write(user_input)
+
 
         with st.chat_message("assistant"):
-            answer = st.session_state.rag.output_result(chat_input)
-            st.write(answer)
+            with st.spinner("Thinking..."):
+                answer = st.session_state.rag.output_result(user_input)
+                st.write(answer)
+
+        st.session_state.messages.append(
+            {"role": "assistant", "content": answer}
+        )
