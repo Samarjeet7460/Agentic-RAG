@@ -11,6 +11,7 @@ from pinecone import Pinecone, ServerlessSpec
 import os
 from langgraph.graph.message import BaseMessage, add_messages
 from langchain.messages import HumanMessage, SystemMessage
+from langgraph.checkpoint.memory import MemorySaver
 
 load_dotenv()
 
@@ -45,6 +46,7 @@ class Agentic_RAG:
                 )
             )
         self.index = self.pc.Index(self.index_name)
+        self.checkpoint = MemorySaver()
 
     def ingest_documents(self):
         try:
@@ -283,7 +285,7 @@ class Agentic_RAG:
         
         graph.add_edge('answer', END)
 
-        self.workflow = graph.compile()
+        self.workflow = graph.compile(checkpointer=self.checkpoint)
 
     def output_result(self, question: str):
         if not self.workflow:
@@ -299,5 +301,5 @@ class Agentic_RAG:
             "final_answer": ""
         }
 
-        result = self.workflow.invoke(initial_state)
+        result = self.workflow.invoke(initial_state, config={"configurable": {"thread_id": 'thread-123'}})
         return result["final_answer"]

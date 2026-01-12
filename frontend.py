@@ -3,7 +3,7 @@ from main import Agentic_RAG
 import os
 
 st.set_page_config(page_title="Document QNA Chatbot!", page_icon="🤖")
-st.title("Agentic RAG Chatbot")
+st.title("Document QNA Chatbot!")
 
 BASE_DOCS_DIR = "docs"
 os.makedirs(BASE_DOCS_DIR, exist_ok=True)
